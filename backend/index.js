@@ -5,8 +5,13 @@ const { Pool } = require('pg');
 require('dotenv').config();
 
 
-app.use(express.json());
 app.use(cors({ origin: "https://muscle-makers-fe.vercel.app" }));
+
+const app = express();
+const PORT = process.env.PORT || 10000;
+
+app.use(express.json());
+
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "https://muscle-makers-fe.vercel.app");
@@ -15,8 +20,7 @@ app.use((req, res, next) => {
   next();
 });
 
-const app = express();
-const PORT = process.env.PORT || 10000;
+
 const pool = new Pool({
     user: 'postgres',
     host: 'localhost',
