@@ -4,6 +4,10 @@ const { Pool } = require('pg');
 
 require('dotenv').config();
 
+
+app.use(express.json());
+app.use(cors({ origin: "https://muscle-makers-fe.vercel.app" }));
+
 const app = express();
 const PORT = process.env.PORT || 10000;
 const pool = new Pool({
@@ -13,9 +17,6 @@ const pool = new Pool({
     password: 'pgadmin17',
     port: 5432,
   });
-
-app.use(cors());
-app.use(express.json());
 
 app.listen(PORT, "0.0.0.0", () => {
   console.log(`Server running on http://0.0.0.0:${PORT}`);
