@@ -14,11 +14,10 @@ app.use(cors({ origin: "https://muscle-makers-fe.vercel.app" }));
 
 // ✅ Database Connection
 const pool = new Pool({
-    user: process.env.DB_USER || 'postgres',
-    host: process.env.DB_HOST || 'localhost',
-    database: process.env.DB_NAME || 'postgres',
-    password: process.env.DB_PASSWORD || 'pgadmin17',
-    port: process.env.DB_PORT || 5432,
+    connectionString: process.env.DATABASE_URL || "postgresql://postgres.ngdiuptnzskfnuiajuwn:Imagineit99!@aws-0-ap-south-1.pooler.supabase.com:6543/postgres",
+    ssl: {
+      rejectUnauthorized: false,
+    },
 });
 
 // ✅ Test API Route
