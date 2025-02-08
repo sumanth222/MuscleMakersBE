@@ -59,7 +59,7 @@ app.post("/api/orders", async (req, res) => {
 
       const query = `
       INSERT INTO orders (order_id, user_id, order_items, total_price, order_status, address)
-      VALUES (nextval('user_id_seq'), $1, $2, $3, 'Pending', $4)
+      VALUES (nextval('order_id_seq'), $1, $2, $3, 'Pending', $4)
       RETURNING *;
       `;
       const values = [user_id, JSON.stringify(order_items), total_price, address];
