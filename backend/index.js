@@ -10,7 +10,8 @@ const PORT = process.env.PORT || 10000;
 app.use(express.json());
 
 // ✅ Enable CORS for your frontend
-app.use(cors({ origin: "https://muscle-makers-fe.vercel.app" }));
+//app.use(cors({ origin: "https://muscle-makers-fe.vercel.app" }));
+app.use(cors({ origin: "https://www.musclemakers.in"}));
 
 // ✅ Database Connection
 const pool = new Pool({
