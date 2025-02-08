@@ -28,7 +28,7 @@ app.get('/', (req, res) => {
 // ✅ Fetch Products
 app.get('/api/products', async (req, res) => {
   try {
-    const result = await pool.query('SELECT * FROM products.products');
+    const result = await pool.query('SELECT * FROM products');
     res.json(result.rows);
   } catch (error) {
     console.error("Database error:", error);
