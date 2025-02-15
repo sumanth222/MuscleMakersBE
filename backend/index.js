@@ -4,14 +4,14 @@ const { Pool } = require('pg');
 require('dotenv').config();
 
 const app = express();
-const PORT = process.env.PORT || 10000;
+const PORT = process.env.PORT || 5000;
 
 // ✅ Enable JSON request parsing
 app.use(express.json());
 
 // ✅ Enable CORS for your frontend
 //app.use(cors({ origin: "https://muscle-makers-fe.vercel.app" }));
-app.use(cors({ origin: "https://www.musclemakers.in"}));
+app.use(cors());
 
 // ✅ Database Connection
 const pool = new Pool({
@@ -86,7 +86,25 @@ app.get("/api/orders/:user_id", async (req, res) => {
   }
 });
 
+
+app.post("/api/waitlist/:phone_number", async (req, res) => {
+  try {
+      const { phone_number } = req.body;
+      const query = `INSERT INTO WAITLIST (ID, PHONE, CREATED_AT) VALUES 
+      (nextval('waitlist_id_seq'), $1, NOW())
+      RETURNING *;
+      `;
+      const values = [phone_number];
+      
+      const result = await pool.query(query, values);
+      res.status(201).json({ success: true, order: result.rows[0] });
+  } catch (error) {
+      console.error("Error while inserting into waitlist:", error);
+      res.status(500).json({ success: false, error: "Internal Server Error" });
+  }
+});
+
 // ✅ Start Server
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Server running on http://0.0.0.0:${PORT}`);
+app.listen(PORT, () => {
+  console.log(`Server running on ${PORT}`);
 });
