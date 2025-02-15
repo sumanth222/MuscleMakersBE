@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const { Pool } = require('pg');
+const crypto = require("crypto");
 require('dotenv').config();
 
 const app = express();
@@ -103,6 +104,31 @@ app.post("/api/waitlist/:phone_number", async (req, res) => {
       res.status(500).json({ success: false, error: "Internal Server Error" });
   }
 });
+
+
+
+function hashIP(ip) {
+  return crypto.createHash("sha256").update(ip).digest("hex");
+}
+
+app.post("/api/audit/:page", async(req, resp) => {
+  const { page } = req.body;
+    try {
+      let userIP = req.headers["x-forwarded-for"] || req.socket.remoteAddress;
+      let hashed_ip = hashIP(userIP);
+
+      // Store hashed IP in PostgreSQL
+      const query = `INSERT INTO audit_logs (id, hashed_ip, page) VALUES (nextval('audit_logs_id_seq'), $1,$2)`;
+      const values = [hashed_ip, page];
+
+      const result = await pool.query(query, values);
+      resp.status(200).send(`Your hashed IP is stored securely.`);
+    } 
+    catch (error) {
+        console.error("Error storing IP:", error);
+        resp.status(500).send("Internal Server Error");
+    }
+})
 
 // ✅ Start Server
 app.listen(PORT, () => {
